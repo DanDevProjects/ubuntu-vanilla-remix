@@ -5,4 +5,5 @@ ubuntu-standard
 network-manager
 firefox
 calamares
-calamares-settings-ubuntu
+linux-generic
+casper
