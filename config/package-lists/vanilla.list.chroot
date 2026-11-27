@@ -7,4 +7,6 @@ firefox
 calamares
 linux-generic
 casper
-syslinux-utils
+grub-efi-amd64-bin
+grub-pc-bin
+shim-signed

@@ -17,18 +17,17 @@ jobs:
           name: ubuntu-vanilla-remix-resolute
           run-id: ${{ github.event.inputs.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Install QEMU, noVNC, and Cloudflare Tunnel
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-system-x86 novnc websockify curl
+          sudo apt-get install -y qemu-system-x86 ovmf novnc websockify curl
           curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
           chmod +x cloudflared
           sudo mv cloudflared /usr/local/bin/
 
-      - name: Launch Live Desktop in Browser
+      - name: Launch Live Desktop in Browser (Runs for 25 minutes)
         run: |
-          qemu-system-x86_64 -m 4096 -smp 2 -cdrom *.iso -boot d -vnc :0 &
+          qemu-system-x86_64 -bios /usr/share/ovmf/OVMF.fd -m 4096 -smp 2 -cdrom *.iso -boot d -vnc :0 &
           websockify --web=/usr/share/novnc/ 6080 localhost:5900 &
           cloudflared tunnel --url http://localhost:6080 > tunnel.log 2>&1 &
           sleep 10
