@@ -38,7 +38,7 @@ jobs:
             --archive-areas "main restricted universe multiverse" \
             --mirror-bootstrap http://archive.ubuntu.com/ubuntu/ \
             --mirror-binary http://archive.ubuntu.com/ubuntu/ \
-            --debian-installer none \
+            --debian-installer false \
             --iso-application "Ubuntu Vanilla Remix" \
             --iso-volume "Ubuntu Vanilla Remix"
 
