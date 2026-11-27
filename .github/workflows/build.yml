@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'Ubuntu Release Codename (e.g. noble, resolute)'
+        description: 'resolute'
         required: true
         default: 'resolute'
 
@@ -25,7 +25,7 @@ jobs:
       - name: Install live-build
         run: |
           sudo apt-get update
-          sudo apt-get install -y live-build debootstrap
+          sudo apt-get install -y live-build debootstrap syslinux-utils
 
       - name: Configure live-build
         run: |
@@ -36,8 +36,8 @@ jobs:
             --distribution ${{ github.event.inputs.release }} \
             --architecture amd64 \
             --archive-areas "main restricted universe multiverse" \
-            --mirror-bootstrap http://archive.ubuntu.com/ubuntu/ \
-            --mirror-binary http://archive.ubuntu.com/ubuntu/ \
+            --mirror-bootstrap http://azure.archive.ubuntu.com/ubuntu/ \
+            --mirror-binary http://azure.archive.ubuntu.com/ubuntu/ \
             --debian-installer false \
             --memtest none \
             --bootloader grub-pc \
