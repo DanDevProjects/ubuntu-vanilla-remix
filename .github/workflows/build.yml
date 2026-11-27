@@ -41,6 +41,7 @@ jobs:
             --debian-installer false \
             --memtest none \
             --bootloader grub-pc \
+            --binary-images iso \
             --initramfs casper \
             --iso-application "Ubuntu Vanilla Remix" \
             --iso-volume "Ubuntu Vanilla Remix"
