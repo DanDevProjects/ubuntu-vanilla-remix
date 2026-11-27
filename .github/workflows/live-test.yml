@@ -1,0 +1,39 @@
+name: Interactive Live Browser Testing Setup 
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Workflow from attempt 10'
+        required: true
+
+jobs:
+  live-desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download ISO from Build Run
+        uses: actions/download-artifact@v4
+        with:
+          name: ubuntu-vanilla-remix-resolute
+          run-id: ${{ github.event.inputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install QEMU, noVNC, and Cloudflare Tunnel
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-system-x86 novnc websockify curl
+          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+          chmod +x cloudflared
+          sudo mv cloudflared /usr/local/bin/
+
+      - name: Launch Live Desktop in Browser
+        run: |
+          qemu-system-x86_64 -m 4096 -smp 2 -cdrom *.iso -boot d -vnc :0 &
+          websockify --web=/usr/share/novnc/ 6080 localhost:5900 &
+          cloudflared tunnel --url http://localhost:6080 > tunnel.log 2>&1 &
+          sleep 10
+          echo "=========================================="
+          echo "CLICK THIS LINK TO USE YOUR OS IN BROWSER:"
+          grep -o 'https://[-0-9a-z]*\.trycloudflare\.com' tunnel.log | head -n 1
+          echo "=========================================="
+          sleep 1500
