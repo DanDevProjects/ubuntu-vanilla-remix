@@ -1,10 +1,10 @@
-name: Interactive Live Browser Testing Setup 
+name: Interactive Live Browser Desktop
 
 on:
   workflow_dispatch:
     inputs:
       run_id:
-        description: 'Workflow from attempt 10'
+        description: 'Workflow Run ID from your green-checkmark ISO build'
         required: true
 
 jobs:
@@ -17,17 +17,31 @@ jobs:
           name: ubuntu-vanilla-remix-resolute
           run-id: ${{ github.event.inputs.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Install QEMU, noVNC, and Cloudflare Tunnel
+
+      - name: Install QEMU, noVNC, xorriso, and Cloudflare Tunnel
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-system-x86 ovmf novnc websockify curl
+          sudo apt-get install -y qemu-system-x86 novnc websockify curl xorriso
           curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
           chmod +x cloudflared
           sudo mv cloudflared /usr/local/bin/
 
-      - name: Launch Live Desktop in Browser (Runs for 25 minutes)
+      - name: Extract Kernel and Boot Live Desktop Directly
         run: |
-          qemu-system-x86_64 -bios /usr/share/ovmf/OVMF.fd -m 4096 -smp 2 -cdrom *.iso -boot d -vnc :0 &
+          ISO_FILE=$(find . -name "*.iso" | head -n 1)
+          mkdir -p iso_extract
+          xorriso -osirrox on -indev "$ISO_FILE" -extract / iso_extract
+          VMLINUZ=$(find iso_extract -name "vmlinuz*" | head -n 1)
+          INITRD=$(find iso_extract -name "initrd*" | head -n 1)
+          echo "Booting kernel: $VMLINUZ with initrd: $INITRD"
+          qemu-system-x86_64 \
+            -m 4096 \
+            -smp 2 \
+            -kernel "$VMLINUZ" \
+            -initrd "$INITRD" \
+            -append "boot=casper quiet splash ---" \
+            -cdrom "$ISO_FILE" \
+            -vnc :0 &
           websockify --web=/usr/share/novnc/ 6080 localhost:5900 &
           cloudflared tunnel --url http://localhost:6080 > tunnel.log 2>&1 &
           sleep 10
