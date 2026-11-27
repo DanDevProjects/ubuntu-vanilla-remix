@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'resolute'
+        description: 'Ubuntu Release Codename (e.g. noble, resolute)'
         required: true
         default: 'resolute'
 
@@ -38,7 +38,7 @@ jobs:
             --archive-areas "main restricted universe multiverse" \
             --mirror-bootstrap http://archive.ubuntu.com/ubuntu/ \
             --mirror-binary http://archive.ubuntu.com/ubuntu/ \
-            --debian-installer live \
+            --debian-installer none \
             --iso-application "Ubuntu Vanilla Remix" \
             --iso-volume "Ubuntu Vanilla Remix"
 
@@ -47,9 +47,9 @@ jobs:
           cd build
           sudo lb build
 
-      - name: Publish ISO to GitHub Releases
-        uses: softprops/action-gh-release@v2
+      - name: Save private test ISO artifact
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: v-${{ github.event.inputs.release }}-${{ github.run_number }}
-          name: Ubuntu Vanilla Remix (${{ github.event.inputs.release }})
-          files: build/*.iso
+          name: ubuntu-vanilla-remix-${{ github.event.inputs.release }}
+          path: build/*.iso
+          retention-days: 7
