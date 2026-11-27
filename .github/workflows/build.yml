@@ -40,7 +40,7 @@ jobs:
             --mirror-binary http://archive.ubuntu.com/ubuntu/ \
             --debian-installer false \
             --memtest none \
-            --bootloaders grub-pc \
+            --bootloader grub-pc \
             --initramfs casper \
             --iso-application "Ubuntu Vanilla Remix" \
             --iso-volume "Ubuntu Vanilla Remix"
