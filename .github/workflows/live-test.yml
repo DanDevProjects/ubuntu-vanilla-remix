@@ -36,14 +36,11 @@ jobs:
           INITRD=$(find iso_extract -name "initrd*" | head -n 1)
           echo "Booting kernel: $VMLINUZ with initrd: $INITRD"
           qemu-system-x86_64 \
-            -machine q35 \
-            -cpu max \
             -m 6144 \
             -smp 4 \
-            -vga virtio \
-            -device qemu-xhci \
+            -vga std \
+            -usb \
             -device usb-tablet \
-            -device usb-kbd \
             -kernel "$VMLINUZ" \
             -initrd "$INITRD" \
             -append "boot=casper quiet splash ---" \
