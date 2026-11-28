@@ -41,14 +41,13 @@ jobs:
             -cpu max \
             -m 6144 \
             -smp 4 \
-            -device virtio-vga-gl \
-            -display egl-headless \
+            -vga std \
             -device qemu-xhci \
             -device usb-tablet \
             -device usb-kbd \
             -kernel "$VMLINUZ" \
             -initrd "$INITRD" \
-            -append "boot=casper quiet splash ---" \
+            -append "boot=casper systemd.setenv=GSK_RENDERER=cairo systemd.setenv=LIBGL_ALWAYS_SOFTWARE=1 quiet splash ---" \
             -cdrom "$ISO_FILE" \
             -vnc :0 &
           websockify --web=/usr/share/novnc/ 6080 localhost:5900 &
