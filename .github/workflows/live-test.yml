@@ -22,12 +22,13 @@ jobs:
       - name: Install QEMU, noVNC, xorriso, and Cloudflare Tunnel
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-system-x86 novnc websockify curl xorriso
+          sudo apt-get install -y qemu-system-x86 qemu-system-gui libvirglrenderer1 novnc websockify curl xorriso
           curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
           chmod +x cloudflared
           sudo mv cloudflared /usr/local/bin/
 
-      - name: Extract Kernel and Boot Live Desktop Smoothly
+
+      - name: Extract Kernel and Boot Live Desktop with 3D Acceleration
         run: |
           ISO_FILE=$(find . -name "*.iso" | head -n 1)
           mkdir -p iso_extract
@@ -40,14 +41,14 @@ jobs:
             -cpu max \
             -m 6144 \
             -smp 4 \
-            -vga none \
-            -device virtio-gpu-pci \
+            -device virtio-vga-gl \
+            -display egl-headless \
             -device qemu-xhci \
             -device usb-tablet \
             -device usb-kbd \
             -kernel "$VMLINUZ" \
             -initrd "$INITRD" \
-            -append "boot=casper quiet splash systemd.mask=gnome-initial-setup.service ---" \
+            -append "boot=casper quiet splash ---" \
             -cdrom "$ISO_FILE" \
             -vnc :0 &
           websockify --web=/usr/share/novnc/ 6080 localhost:5900 &
