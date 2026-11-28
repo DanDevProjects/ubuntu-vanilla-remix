@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+sed -i 's/PRETTY_NAME="Ubuntu /PRETTY_NAME="Ubuntu Vanilla Remix /g' /etc/os-release
+sed -i 's/NAME="Ubuntu"/NAME="Ubuntu Vanilla Remix"/g' /etc/os-release
+sed -i 's/Ubuntu /Ubuntu Vanilla Remix /g' /etc/issue /etc/issue.net || true
+sed -i 's/DISTRIB_ID=Ubuntu/DISTRIB_ID="Ubuntu Vanilla Remix"/g' /etc/lsb-release || true
+sed -i 's/DISTRIB_DESCRIPTION="Ubuntu /DISTRIB_DESCRIPTION="Ubuntu Vanilla Remix /g' /etc/lsb-release || true

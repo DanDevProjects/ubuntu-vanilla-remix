@@ -37,6 +37,7 @@ jobs:
           qemu-system-x86_64 \
             -m 4096 \
             -smp 2 \
+            -usb -device usb-tablet \
             -kernel "$VMLINUZ" \
             -initrd "$INITRD" \
             -append "boot=casper quiet splash ---" \

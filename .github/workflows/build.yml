@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'resolute'
+        description: 'Ubuntu Release Codename (resolute = 26.04 LTS, questing = 26.10)'
         required: true
         default: 'resolute'
 
@@ -25,7 +25,7 @@ jobs:
       - name: Install live-build
         run: |
           sudo apt-get update
-          sudo apt-get install -y live-build debootstrap syslinux-utils
+          sudo apt-get install -y live-build debootstrap syslinux-utils xorriso
 
       - name: Configure live-build
         run: |
