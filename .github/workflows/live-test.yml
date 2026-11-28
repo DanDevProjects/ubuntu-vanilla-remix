@@ -38,12 +38,12 @@ jobs:
           qemu-system-x86_64 \
             -m 6144 \
             -smp 4 \
-            -vga std \
+            -vga qxl \
             -usb \
             -device usb-tablet \
             -kernel "$VMLINUZ" \
             -initrd "$INITRD" \
-            -append "boot=casper quiet splash ---" \
+            -append "boot=casper nomodeset quiet splash ---" \
             -cdrom "$ISO_FILE" \
             -vnc :0 &
           websockify --web=/usr/share/novnc/ 6080 localhost:5900 &
