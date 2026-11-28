@@ -23,6 +23,13 @@ flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.f
 
 sed -i 's/PRETTY_NAME="Ubuntu /PRETTY_NAME="Ubuntu Vanilla Remix /g' /usr/lib/os-release
 sed -i 's/NAME="Ubuntu"/NAME="Ubuntu Vanilla Remix"/g' /usr/lib/os-release
+sed -i 's/^LOGO=.*/LOGO=ubuntu-vanilla-remix-logo/g' /usr/lib/os-release
+grep -q '^LOGO=' /usr/lib/os-release || echo 'LOGO=ubuntu-vanilla-remix-logo' >> /usr/lib/os-release
 sed -i 's/Ubuntu /Ubuntu Vanilla Remix /g' /etc/issue /etc/issue.net || true
 sed -i 's/DISTRIB_ID=Ubuntu/DISTRIB_ID="Ubuntu Vanilla Remix"/g' /etc/lsb-release || true
 sed -i 's/DISTRIB_DESCRIPTION="Ubuntu /DISTRIB_DESCRIPTION="Ubuntu Vanilla Remix /g' /etc/lsb-release || true
+gtk-update-icon-cache -f -t /usr/share/icons/hicolor || true
+
+rm -f /etc/xdg/autostart/gnome-initial-setup-first-login.desktop || true
+mkdir -p /etc/skel/.config
+echo "yes" > /etc/skel/.config/gnome-initial-setup-done
