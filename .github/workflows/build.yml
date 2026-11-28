@@ -31,6 +31,7 @@ jobs:
         run: |
           mkdir -p build
           cp -r config build/
+          chmod +x build/config/hooks/live/*.chroot || true
           cd build
           lb config \
             --distribution ${{ github.event.inputs.release }} \
@@ -41,6 +42,7 @@ jobs:
             --debian-installer false \
             --memtest none \
             --bootloader grub-efi \
+            --binary-images iso \
             --initramfs casper \
             --iso-application "Ubuntu Vanilla Remix" \
             --iso-volume "Ubuntu Vanilla Remix"
