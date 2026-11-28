@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'Ubuntu Release Codename (resolute = 26.04 LTS, questing = 26.10)'
+        description: 'Ubuntu 26.10 Stonking Stingray'
         required: true
-        default: 'resolute'
+        default: 'stonking'
 
 jobs:
   build-iso:

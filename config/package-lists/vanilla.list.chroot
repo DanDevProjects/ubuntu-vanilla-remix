@@ -1,9 +1,13 @@
-vanilla-gnome-desktop
+gnome-core
 gdm3
 gnome-session
 ubuntu-standard
 network-manager
-firefox
+epiphany-browser
+gnome-tweaks
+gnome-software
+gnome-software-plugin-flatpak
+flatpak
 calamares
 linux-generic
 casper
@@ -11,3 +15,5 @@ grub-efi-amd64-bin
 grub-pc-bin
 shim-signed
 xorriso
+curl
+gpg
