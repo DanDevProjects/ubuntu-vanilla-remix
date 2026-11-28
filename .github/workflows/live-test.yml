@@ -36,14 +36,18 @@ jobs:
           INITRD=$(find iso_extract -name "initrd*" | head -n 1)
           echo "Booting kernel: $VMLINUZ with initrd: $INITRD"
           qemu-system-x86_64 \
+            -machine q35 \
+            -cpu max \
             -m 6144 \
             -smp 4 \
-            -vga qxl \
-            -usb \
+            -vga none \
+            -device virtio-gpu-pci \
+            -device qemu-xhci \
             -device usb-tablet \
+            -device usb-kbd \
             -kernel "$VMLINUZ" \
             -initrd "$INITRD" \
-            -append "boot=casper nomodeset quiet splash ---" \
+            -append "boot=casper quiet splash ---" \
             -cdrom "$ISO_FILE" \
             -vnc :0 &
           websockify --web=/usr/share/novnc/ 6080 localhost:5900 &
