@@ -47,7 +47,7 @@ jobs:
             -device usb-kbd \
             -kernel "$VMLINUZ" \
             -initrd "$INITRD" \
-            -append "boot=casper quiet splash ---" \
+            -append "boot=casper quiet splash systemd.mask=gnome-initial-setup.service ---" \
             -cdrom "$ISO_FILE" \
             -vnc :0 &
           websockify --web=/usr/share/novnc/ 6080 localhost:5900 &
